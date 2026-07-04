@@ -14,6 +14,11 @@
 - **En tant que** [persona] **je veux** [capacité] **afin de** [bénéfice]
 - **Critères d'acceptation (Gherkin)** :
   - `Étant donné … Quand … Alors …`
+- **Classes de tests (4×N — obligatoire)** :
+  - `@happy` — [chemin nominal]
+  - `@negative` — [entrées invalides, échecs attendus]
+  - `@edge` — [bornes : vide, max, concurrence, transitions d'état]
+  - `@security` — [abus, injection, autorisation, isolation tenant]
 - **Capacité du Brief rattachée** : [§7.x]
 
 ## 7. Exigences non-fonctionnelles

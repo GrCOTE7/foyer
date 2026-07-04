@@ -7,3 +7,5 @@
 # Environnement virtuel de prévisualisation locale du site
 /.venv-docs/
 __pycache__/
+
+bmad/livrables/test

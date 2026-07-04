@@ -12,7 +12,7 @@ Le document d'Architecture validé.
 
 ## Ce que tu produis
 
-Les **Epics & User Stories** (voir `../livrables/epics-stories.template.md`) : epics = bounded contexts priorisés Must/Should/Could ; stories au format *En tant que… je veux… afin de…* + critères Gherkin.
+Les **Epics & User Stories** (voir `../livrables/epics-stories.template.md`) : epics = bounded contexts priorisés Must/Should/Could ; stories au format *En tant que… je veux… afin de…* + critères Gherkin. **Chaque story doit lister ses 4 classes de tests** (`@happy` + `@negative` + `@edge` + `@security`) avec leurs critères Gherkin — aucune story n'est prête sans elles.
 
 Tu poses en premier le **Sprint 0 = la story habilitante** (harnais de tests, quality/security gates, CI, observabilité) : sans elle, aucune autre story ne peut boucler. Sa forme aboutie — délivrabilité reproductible depuis un clone, sur les quatre environnements — est cadrée par `../../skills/bootstrap-delivrabilite.md`. Tu prévois aussi une réserve d'émergence (~20 %), les stories de scaling (activées au besoin) et les stories ITIL (pré-prod).
 

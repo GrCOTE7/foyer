@@ -32,27 +32,38 @@
 ## 10. Invariants métier critiques
 [Les règles qui ne doivent jamais être violées — candidates à coder dans les constructeurs.]
 
+## 10bis. Flux multi-acteurs
+| Capacité | Initiateur | Validateur | Consommateur | Workflow |
+[Pour chaque capacité impliquant 2+ personas, décrire le flux.]
+
 ## 11. Fonctionnalités MVP
 [Le strict nécessaire pour valider la proposition de valeur.]
 
 ## 12. Fonctionnalités post-MVP
 [Ce qui attend un jalon de capacité ultérieur.]
 
-## 13. Contraintes
+## 13. Dimensionnement projet
+| Dimension | Valeur estimée |
+| Bounded Contexts | [nombre] |
+| Entités domain estimées | [nombre — ~4-5 par BC] |
+| Endpoints API estimés | [nombre — ~10-15 par BC] |
+| Catégorie projet | Micro (1-3 BC) / Petit (3-5 BC) / Moyen (5-10 BC) / Grand (10+ BC) |
+
+## 14. Contraintes
 [Conformité (RGPD, ISO 27001, NIS2) · souveraineté/hébergement · multilingue · stack imposée.]
 
-## 14. Risques
+## 15. Risques
 | Risque | Probabilité | Impact | Mitigation |
 |---|---|---|---|
 | | | | |
 
-## 15. Principes d'architecture
+## 16. Principes d'architecture
 [Les non-négociables : hexagonale, DDD au centre, AGPL si applicable, etc.]
 
-## 16. Métriques de succès
+## 17. Métriques de succès
 [Comment on saura que ça marche — mesurable.]
 
-## 17. Estimation budgétaire préliminaire (point 0)
+## 18. Estimation budgétaire préliminaire (point 0)
 - **Échelle visée** : Scrum / Nexus / SAFe
 - **Coût superviseur** : [jours-homme × taux] — fourchette large assumée
 - **Coût modèle** : [tours estimés → tokens → € à 0,85 €/Mtok in, 2,55 €/Mtok out]

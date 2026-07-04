@@ -4,6 +4,10 @@
 
 ## Statut global : **PASS / CONCERNS / FAIL**
 
+**Fidelity score** : [X]/100 — score de traçabilité Brief→PRD→Architecture→Stories. **PASS uniquement si ≥ 80.**
+
+> Calcul : (capacités Brief couvertes en PRD / total capacités) × 25 + (FRs couvertes en Architecture / total FRs) × 25 + (FRs couvertes en Stories / total FRs) × 25 + (4 classes couvertes / total 4×N) × 25
+
 ## 1. Cohérence DDD
 - Glossaire (ubiquitous language) cohérent Brief→PRD→Archi : ☐
 - Bounded contexts stables : ☐
@@ -23,7 +27,13 @@
 
 ## 5. Glossaire → code (mapping présent) : ☐
 ## 6. BDD + Documentation Vivante (flux critiques couverts) : ☐
+
 ## 7. TDD (stratégie de tests + couverture cible) : ☐
+
+## 7bis. Classes de tests 4×N (mécanisé)
+- Matrice 4×N par FR présente dans le PRD (`@happy` + `@negative` + `@edge` + `@security`) : ☐
+- 4 classes listées dans chaque story : ☐
+- Aucune FR orpheline d'une classe : ☐
 
 ## 8. Readiness organisationnelle
 - Scrum : ☐ · Nexus (si applicable) : ☐ · SAFe (si applicable) : ☐ · ITIL (pré-prod) : ☐

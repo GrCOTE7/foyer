@@ -40,6 +40,14 @@
 ## Glossaire DDD → mapping code
 ## Stratégie de tests
 [Pyramide TDD/BDD · couverture cible par couche · Test-Driven Emergence (BDD↔E2E↔doc vivante).]
+
+## Classes de tests (4×N — hérité de `skills/cycle-dev.md`)
+| Classe | BDD (Gherkin) | TDD (unitaire) | Conditionnement archétype |
+|---|---|---|---|
+| `@happy` | Chemin nominal | Invariants constructeurs, use case nominal | Tous |
+| `@negative` | Entrées invalides | `Result::Err` attendu, validation DTOs | Tous |
+| `@edge` | Bornes (vide, max, concurrence) | Concurrence, transitions d'état, propriété-based | **stateless** : property-based ; **stateful** : concurrence + DB |
+| `@security` | Abus, injection, autorisation | Isolation tenant, injection SQL, XSS | **full-stack** : CSP/XSS Svelte ; **API-first** : abus contrat |
 ## API · Sécurité & RGPD
 
 ## ADR (Architecture Decision Records)

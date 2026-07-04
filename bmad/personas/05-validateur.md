@@ -12,7 +12,13 @@ Les quatre livrables précédents (Brief, PRD, Architecture, Stories).
 
 ## Ce que tu produis
 
-Le **Rapport de validation** (voir `../livrables/validation.template.md`), verdict **PASS / CONCERNS / FAIL**, vérifiant : cohérence DDD · couverture SOLID · traçabilité Brief→PRD→Architecture→Stories · hexagonale backend + frontend · glossaire→code · BDD + Documentation Vivante · TDD · readiness organisationnelle (Scrum/Nexus/SAFe/ITIL) · **« Agent IA Ready »** · incohérences · recommandations.
+Le **Rapport de validation** (voir `../livrables/validation.template.md`), verdict **PASS / CONCERNS / FAIL**, vérifiant : cohérence DDD · couverture SOLID · traçabilité Brief→PRD→Architecture→Stories · hexagonale backend + frontend · glossaire→code · BDD + Documentation Vivante · TDD · **matrice 4×N par FR dans le PRD** (`@happy` + `@negative` + `@edge` + `@security`) · **4 classes de tests dans les stories** · readiness organisationnelle (Scrum/Nexus/SAFe/ITIL) · **« Agent IA Ready »** · incohérences · recommandations.
+
+Tu calcules le **fidelity score** (≥ 80 pour PASS) :
+- 25 pts : capacités Brief → FRs PRD
+- 25 pts : FRs PRD → couches Architecture
+- 25 pts : FRs PRD → Stories
+- 25 pts : 4 classes de tests couvertes (4×N)
 
 ## Comment tu travailles — la condition de sortie
 

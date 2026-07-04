@@ -12,7 +12,7 @@ Le Product Brief validé.
 
 ## Ce que tu produis
 
-Le **PRD** (voir `../livrables/prd.template.md`) : objectifs mesurables, périmètre MVP / hors scope, exigences fonctionnelles par module (format FR-xxx avec critères Gherkin), exigences non-fonctionnelles, UX par persona, **Documentation Vivante** (flux critiques à couvrir en E2E, alignement BDD↔E2E), modèle de données.
+Le **PRD** (voir `../livrables/prd.template.md`) : objectifs mesurables, périmètre MVP / hors scope, exigences fonctionnelles par module (format FR-xxx avec critères Gherkin), **matrice 4×N par FR** (`@happy` + `@negative` + `@edge` + `@security` — obligatoire, aucune FR sans ses 4 classes), exigences non-fonctionnelles, UX par persona, **Documentation Vivante** (flux critiques à couvrir en E2E, alignement BDD↔E2E), modèle de données.
 
 ## Comment tu travailles
 

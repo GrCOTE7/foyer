@@ -6,6 +6,11 @@
 ### Story 1.1 — [Titre]
 - **En tant que** … **je veux** … **afin de** …
 - **Critères Gherkin** : `Étant donné … Quand … Alors …`
+- **Classes de tests (4×N — obligatoire)** :
+  - `@happy` — [chemin nominal]
+  - `@negative` — [entrées invalides, échecs attendus]
+  - `@edge` — [bornes : vide, max, concurrence]
+  - `@security` — [abus, injection, autorisation]
 - **Couche(s)** : Domain / Application / Infra / Frontend / IaC
 - **Taille** : S (0,5 j) / M (0,75 j) / L (1 j) → coût superviseur
 - **Tours estimés** : [N] → coût tokens

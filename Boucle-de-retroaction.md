@@ -75,4 +75,28 @@ Quand un tour engage un choix **irréversible** (mapping branche GitFlow → env
 
 ---
 
+## Garde-fous L0-L2 (hérité de la Méthode Maury, KoproGo)
+
+> Ce qui suit n'est pas de la guidance. Ce sont les **contraintes mécaniques** qui rendent la primitive fiable. Sans elles, l'agent va sauter les étapes par confort.
+
+### L0 — Contexte propre
+- `CLAUDE.md` / `AGENTS.md` ≤ 5k tokens : pas de doublons, pas de binaires versionnés, pas de bruit.
+- Un contexte gonflé dégrade l'agent. Le garder minimal est un invariant.
+
+### L1 — Sécurité runtime
+- **Permissions** : `deny` sur les actions irréversibles (`git push`, `rm -rf`, `sudo`), `ask` sur les actions engageantes.
+- **Secrets** : `.gitleaks.toml` actif, stop sur tout commit contenant un secret.
+- **Hooks PreToolUse** : bloquer `secret-write`, `prod-action`.
+- **Hooks PostToolUse** : formatage automatique, avertissement sur `unwrap()`, injection des règles.
+
+### L2 — Discipline validation
+- **4 classes de tests obligatoires** : `@happy` + `@negative` + `@edge` + `@security` — aucune story sans les 4.
+- **RED-first hook** : pas de code sans test rouge écrit avant. Le hook Git bloque si un commit ajoute du code sans test correspondant.
+- **Matrice 4×N par FR** : chaque exigence fonctionnelle du PRD doit avoir ses 4 classes documentées.
+- **Cowork release** : le merge sur `main` nécessite un rapport de release signé GO par l'humain.
+
+> **Sans ces garde-fous, la méthode reste une intention. Avec, elle devient un système de production reproductible.**
+
+---
+
 *Ce fichier **oriente** (registre guidance) ; il ne remplace pas les garde-fous déterministes (hooks, permissions) qui seuls contraignent. Dérivé du Manifeste Maury (CC BY-SA 4.0).*

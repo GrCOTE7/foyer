@@ -8,7 +8,7 @@
 
 BMAD traduit la vision stratégique (TOGAF) en backlog structuré : par où commencer, dans quel ordre. Il décompose **épopées → capacités → fonctionnalités → user stories**, en garantissant que rien n'entre en sprint sans alignement à la vision.
 
-**Règle d'or : un agent = un rôle = un livrable.** Chaque persona génère ; le superviseur valide avant le suivant. Un livrable non relu par l'humain est une faute au sens *répondre-de*.
+**Règle d'or : un agent = un rôle = un livrable.** Chaque persona génère ; le superviseur valide avant le suivant. Un livrable non relu par l'humain est une faute au sens *répondre-de*. **Chaque livrable doit inclure un frontmatter de signature humaine** (date, nom, rôle, version) — trace obligatoire pour le répondre-de.
 
 ## Le pipeline
 

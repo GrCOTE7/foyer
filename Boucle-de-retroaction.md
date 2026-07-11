@@ -24,6 +24,19 @@ Le cycle dev rouge/vert/bleu n'est qu'**une instance** de ce cercle (l'outil qui
 
 À grain constant, le cercle **itère** : story après story. Entre les grains, l'**Amélioration d'un grain alimente la Conception du grain au-dessus** — la fabrication nourrit le pilotage (CSI), qui nourrit l'architecture (ADM). Même forme à tous les grains : c'est l'auto-similarité.
 
+### Le meta-grain — la méthode elle-même comme artefact
+
+La spirale ne s'arrête pas à l'architecture. Il y a un **grain 4**, au-dessus du grain Architecture : la méthode elle-même est l'artefact évalué et amélioré. Sans ce meta-grain, la méthode devient un texte figé — une dette textuelle que personne ne maintient, exactement l'erreur que le Manifeste Maury décrit en section 1.2 (*« les logiciels qu'on déploie aujourd'hui dureront moins longtemps que ceux d'hier »*). Voir **Manifeste Maury §4.4.11** pour le développement philosophique complet.
+
+**Qui tient le meta-cercle** : l'Architecte solution. C'est déjà son rôle — la méta-boucle ADR/ADM. Son périmètre s'étend : pas seulement les ADR d'un projet, mais les **ADR méthodologiques** qui changent la méthode elle-même.
+
+**Outil qui objective** : trois signaux ouvrent le meta-cercle :
+1. Un skill Foyer est né d'un incident opérationnel (ex: `contrat-api.md`) → le Manifest ne connaît pas ce risque → gap à combler.
+2. Un concept Foyer est absent du Manifest (ex: archétypes, anneaux d'enforcement) → innovation à partager (ShareAlike).
+3. Un `[caler]` du Méthode a été remplacé par du mesuré → prior à corriger.
+
+**Condition de sortie** : Manifest mis à jour ou gap justifié par ADR méthodologique, version incrémentée. Avant toute sortie sur un choix irréversible au meta-grain, **l'humain valide** — c'est la méthode elle-même qui change, et elle affecte tous les projets futurs.
+
 ## La condition de sortie
 
 Un cercle ne s'arrête pas seul ; une story, si. On referme **tant que l'Évaluation réfute** (rouge, gate qui bloque, IaC non convergée) ; on sort **quand elle ne réfute plus**. Avant toute sortie sur un choix irréversible, **l'humain valide**.
@@ -43,7 +56,7 @@ Sans outil pour objectiver, pas d'Évaluation, donc pas de cercle. **Mettre en p
 
 Coût d'une story ≈ *N* tours × (tokens + wall-clock). L'asymétrie des terrains (IaC, DevSecOps : peu de tokens, fort wall-clock) n'est qu'une ventilation différente de ces deux coûts.
 
-> Le superviseur est idéalement un **binôme** (parfois un trio), pas une personne seule : le wall-clock supplémentaire est un **investissement** dans la transmissibilité et contre le *bus factor 1* — un répondre-de tenu par une seule tête est fragile. Voir Manifeste (conviction 3) et `skills/abaque-cout-capacite.md`.
+> Le superviseur est idéalement un **binôme** (parfois un trio), pas une personne seule : le wall-clock supplémentaire est un **investissement** dans la transmissibilité et contre le *bus factor 1* — un répondre-de tenu par une seule tête est fragile. Voir Manifeste (conviction 8) et `skills/abaque-cout-capacite.md`.
 
 ## Les deux axes de spécialisation
 
@@ -99,4 +112,4 @@ Quand un tour engage un choix **irréversible** (mapping branche GitFlow → env
 
 ---
 
-*Ce fichier **oriente** (registre guidance) ; il ne remplace pas les garde-fous déterministes (hooks, permissions) qui seuls contraignent. Dérivé du Manifeste Maury (CC BY-SA 4.0).*
+*Version 0.2 — dérivé du Manifeste Maury (CC BY-SA 4.0). Hérite de la primitive décrite en Manifeste Maury §4.4.11. Ce fichier est la forme portable (≤ 5k tokens) de la Boucle de rétroaction, chargeable comme AGENTS.md.*

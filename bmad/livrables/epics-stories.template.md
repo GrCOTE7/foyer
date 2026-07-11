@@ -42,3 +42,7 @@
 
 - **Coût superviseur** = Σ jours × taux · **Coût modèle** = Σ tokens × tarif
 - **Comparaison à la target** du Brief (§17)
+
+---
+
+*Dérivé du Manifeste Maury (CC BY-SA 4.0). Source : [`github.com/gilmry/manifest`](https://github.com/gilmry/manifest).*

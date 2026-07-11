@@ -40,3 +40,7 @@
 ## 11. Intégrations externes
 ## 12. Contraintes et hypothèses
 ## 13. Critères de succès MVP
+
+---
+
+*Dérivé du Manifeste Maury (CC BY-SA 4.0). Source : [`github.com/gilmry/manifest`](https://github.com/gilmry/manifest).*

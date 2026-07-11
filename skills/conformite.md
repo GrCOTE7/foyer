@@ -60,7 +60,7 @@ Tant qu'un écart n'est pas comblé, on le **nomme** — un angle mort tu, c'est
 
 ## 6. Coût
 
-**Peu de tokens, wall-clock modéré** : la conformité s'objective par revue et exécution de gates, pas par génération. Le poste dominant reste le superviseur (qui *répond de* la correspondance). Le mapping se tient idéalement **en binôme** : la transmissibilité de la conformité est elle-même un anti-*bus factor 1* (cf. Manifeste, conviction 3).
+**Peu de tokens, wall-clock modéré** : la conformité s'objective par revue et exécution de gates, pas par génération. Le poste dominant reste le superviseur (qui *répond de* la correspondance). Le mapping se tient idéalement **en binôme** : la transmissibilité de la conformité est elle-même un anti-*bus factor 1* (cf. Manifeste, conviction 8).
 
 ---
 

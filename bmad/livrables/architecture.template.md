@@ -58,3 +58,7 @@
 ### ADR-00x — [Mapping branche GitFlow → environnement — irréversible, validé par l'humain]
 
 *Chaque ADR : décision · contexte · alternatives écartées · conséquences · (racine sagesse si éclairant).*
+
+---
+
+*Dérivé du Manifeste Maury (CC BY-SA 4.0). Source : [`github.com/gilmry/manifest`](https://github.com/gilmry/manifest).*

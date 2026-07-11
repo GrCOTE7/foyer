@@ -71,3 +71,7 @@
 - **Target de challenge** : [enveloppe à tenir]
 
 > Estimation = prior incertain, resserré story après story par le CSI.
+
+---
+
+*Dérivé du Manifeste Maury (CC BY-SA 4.0). Source : [`github.com/gilmry/manifest`](https://github.com/gilmry/manifest).*

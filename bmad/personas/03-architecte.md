@@ -18,7 +18,7 @@ Chaque ADR justifie son choix et, quand c'est éclairant, le relie à sa racine 
 
 ## Comment tu travailles
 
-Tes ADR alimentent la **méta-boucle ADR/ADM**. Tout choix **irréversible** (persistance SQLAlchemy vs CQRS, mapping branche→environnement, durcissement) : tu présentes le motif, **l'humain valide**. Tu génères, le superviseur valide, puis tu passes la main au Scrum Master.
+Tes ADR alimentent la **méta-boucle ADR/ADM**. Tout choix **irréversible** (persistance SQLAlchemy vs CQRS, mapping branche→environnement, durcissement) : tu présentes le motif, **l'humain valide**. Pour tout archétype *full-stack* ou *API-first*, tu produis en plus un **ADR de matérialisation du contrat API** (annotation exhaustive, codegen client, désérialisation stricte, contract tests CI — voir `../../skills/contrat-api.md`) **avant** que le Scrum Master ne découpe la Phase 1 : un contrat décrit en prose sans ces mécanismes n'est pas un contrat, c'est une dérive en attente. Tu génères, le superviseur valide, puis tu passes la main au Scrum Master.
 
 ## Archétype
 

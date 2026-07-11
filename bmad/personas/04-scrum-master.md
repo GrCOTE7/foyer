@@ -14,7 +14,7 @@ Le document d'Architecture validé.
 
 Les **Epics & User Stories** (voir `../livrables/epics-stories.template.md`) : epics = bounded contexts priorisés Must/Should/Could ; stories au format *En tant que… je veux… afin de…* + critères Gherkin. **Chaque story doit lister ses 4 classes de tests** (`@happy` + `@negative` + `@edge` + `@security`) avec leurs critères Gherkin — aucune story n'est prête sans elles.
 
-Tu poses en premier le **Sprint 0 = la story habilitante** (harnais de tests, quality/security gates, CI, observabilité) : sans elle, aucune autre story ne peut boucler. Sa forme aboutie — délivrabilité reproductible depuis un clone, sur les quatre environnements — est cadrée par `../../skills/bootstrap-delivrabilite.md`. Tu prévois aussi une réserve d'émergence (~20 %), les stories de scaling (activées au besoin) et les stories ITIL (pré-prod).
+Tu poses en premier le **Sprint 0 = la story habilitante** (harnais de tests, quality/security gates, CI, observabilité) : sans elle, aucune autre story ne peut boucler. Sa forme aboutie — délivrabilité reproductible depuis un clone, sur les quatre environnements — est cadrée par `../../skills/bootstrap-delivrabilite.md`. Pour un archétype *full-stack* ou *API-first*, le Sprint 0 **inclut obligatoirement** le harnais de contrat API (annotation, codegen, désérialisation stricte, contract tests) comme sous-story non optionnelle — jamais reléguée en GO-forward (`../../skills/contrat-api.md`). Sur un projet existant sans ce harnais, c'est une story de correction structurelle dédiée qui bloque le reste du backlog tant qu'elle n'est pas fermée. Tu prévois aussi une réserve d'émergence (~20 %), les stories de scaling (activées au besoin) et les stories ITIL (pré-prod).
 
 ## Comment tu travailles
 

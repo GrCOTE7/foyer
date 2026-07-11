@@ -17,7 +17,7 @@ Combinaisons courantes : *stateless API-first* (transform exposé), *stateful AP
 
 **API-first** — le **contrat API (OpenAPI/AsyncAPI) est un délivrable de premier rang, écrit avant le code** · exigences PRD exprimées en endpoints · **versioning et rétro-compatibilité** · BDD au niveau contrat, **contract tests** · couche Frontend : N/A · point irréversible propre : **rupture de contrat / changement de version majeure**.
 
-**Full-stack** — **les sept couches**, dont Frontend (pages Astro statiques + îlots Svelte 5) · **E2E cross-stack + Documentation Vivante** (flux critiques filmés) · point irréversible : cumul (schéma + contrat + mapping branche→env).
+**Full-stack** — **les sept couches**, dont Frontend (pages Astro statiques + îlots Svelte 5) · **E2E cross-stack + Documentation Vivante** (flux critiques filmés) · point irréversible : cumul (schéma + contrat + mapping branche→env). **Le contrat API doit être matérialisé, pas seulement décrit** — annotation exhaustive + client généré + désérialisation stricte + contract tests CI, voir `../skills/contrat-api.md` (skill né d'un incident réel : contrat non matérialisé → NO-GO en production).
 
 ## Matrice d'applicabilité des sections
 
@@ -29,16 +29,18 @@ Combinaisons courantes : *stateless API-first* (transform exposé), *stateful AP
 | Modèle de données (entités → tables), migrations | — | ✓ | ○ | ✓ |
 | Idempotence / pureté | ✓ | ○ | ○ | ○ |
 | Concurrence / cohérence / transactions | — | ✓ | ○ | ✓ |
-| **Contrat API (OpenAPI)** + versioning | ○ | ○ | ✓ | ✓ |
+| **Contrat API (OpenAPI)** + versioning — *matérialisé, pas décrit* ¹ | ○ | ○ | ✓ | ✓ |
 | Frontend UX / îlots / arborescence pages | — | — | — | ✓ |
 | Couche Frontend (architecture) | — | — | — | ✓ |
 | E2E cross-stack + Documentation Vivante | ○ | ○ | contract tests | ✓ |
 | Couches Application · IaC · CI/CD · Monitoring | ✓ | ✓ | ✓ | ✓ |
 
+¹ Un `✓` ici n'est acquis que si les quatre éléments de `../skills/contrat-api.md` sont en place (annotation exhaustive, client généré, désérialisation stricte, contract tests CI) — une section PRD §9bis en prose sans ces mécanismes reste un `—` de facto, quelle que soit la case cochée.
+
 ## Conséquence pour chaque persona
 
 - **Analyste** : nomme l'archétype dès le Brief (§13 Contraintes) ; l'estimation point 0 en dépend (un stateless converge en moins de tours qu'un full-stack).
-- **Product Manager** : pour API-first, exprime les exigences en endpoints et **produit le contrat OpenAPI** ; saute §10 (modèle de données) si stateless.
-- **Architecte** : n'instancie que les couches en scope ; pour API-first, le contrat précède le code ; trace le point irréversible propre à l'archétype.
-- **Scrum Master** : la **story habilitante** varie (stateless : pas de harnais DB ; API-first : ajoute le harnais de contract testing).
-- **Validateur** : vérifie la **conformité à l'archétype** — une section hors scope présente, ou une section requise absente, est une incohérence.
+- **Product Manager** : pour API-first ou full-stack, exprime les exigences en endpoints et **produit le contrat OpenAPI** — §9bis doit nommer l'outil d'annotation et l'outil de codegen, pas seulement décrire des conventions REST (`../skills/contrat-api.md`) ; saute §10 (modèle de données) si stateless.
+- **Architecte** : n'instancie que les couches en scope ; pour API-first et full-stack, le contrat précède le code et sa **matérialisation fait l'objet d'un ADR dédié** avant la Phase 1 (annotation, codegen, `deny_unknown_fields`, contract tests) — traité avec le même sérieux que la migration de schéma, voir `../skills/contrat-api.md` ; trace le point irréversible propre à l'archétype.
+- **Scrum Master** : la **story habilitante** varie (stateless : pas de harnais DB ; API-first et full-stack : ajoute le harnais de contract testing **comme sous-story non optionnelle du Sprint 0**, jamais reléguée en GO-forward — `../skills/contrat-api.md`).
+- **Validateur** : vérifie la **conformité à l'archétype** — une section hors scope présente, ou une section requise absente, est une incohérence ; pour API-first/full-stack, vérifie que le contrat est **matérialisé** (les 4 éléments), pas seulement décrit.

@@ -27,7 +27,7 @@ Créer la **production**, poser la **protection de branche**, le **mapping branc
 
 ## Conditionnement
 
-- **Archétype** : un *stateless* bootstrap moins (pas de datastore, pas de migrations) ; un *full-stack* monte les quatre environnements + build frontend + E2E cross-stack.
+- **Archétype** : un *stateless* bootstrap moins (pas de datastore, pas de migrations) ; un *full-stack* monte les quatre environnements + build frontend + E2E cross-stack **+ le harnais de contrat API matérialisé** (annotation, codegen client, désérialisation stricte, contract tests CI — non optionnel, voir `contrat-api.md`). Un bootstrap full-stack qui livre l'environnement sans ce harnais reproduit le piège OpenMajor : le socle « tourne » mais dérive en silence jusqu'au premier testing report NO-GO.
 - **Échelle** : dev/test en `compose` ; staging/prod selon le tier (`compose` → `K3s` → `K8s`, cf. l'abaque — le tier pèse sur mémoire *et* coût).
 
 ## Definition of Done de la story de délivrabilité

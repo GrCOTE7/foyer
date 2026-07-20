@@ -1,0 +1,111 @@
+name: Java — CI Foyer
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 3 * * 1"
+
+jobs:
+  gate-secrets:
+    uses: ./.github/workflows/gate-secrets.yml
+
+  build:
+    needs: gate-secrets
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9  # v4.8.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - run: mvn -B -DskipTests package
+      - name: Build image
+        id: meta
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
+          docker build -t "$IMAGE" .
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+  # GATE 2 — SBOM applicatif (bloquant)
+  gate-sbom:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9  # v4.8.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - run: mvn -B org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+      # makeAggregateBom produit DÉJÀ l'agrégat à la racine du reactor. Un find
+      # récursif ramassait en plus les BOM par module et, faute de -quit, chaque
+      # cp écrasait le précédent : c'était le BOM du dernier module parcouru qui
+      # était publié à la place de l'agrégat.
+      - run: cp target/bom.json maven-sbom.cdx.json
+      - run: test -s maven-sbom.cdx.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: maven-sbom
+          path: maven-sbom.cdx.json
+          retention-days: 90
+
+  gate-container:
+    needs: build
+    uses: ./.github/workflows/gate-container.yml
+    with:
+      image-ref: ${{ needs.build.outputs.image }}
+
+  guidance-sast:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Opengrep scan
+        run: |
+          docker run --rm -v "$PWD:/src" opengrep/opengrep:v1.25.0 \
+            scan --config auto --sarif --output /src/opengrep.sarif /src
+      - uses: github/codeql-action/upload-sarif@b7351df727350dca84cb9d725d57dcf5bc82ba26  # v3.37.1
+        if: always()
+        with:
+          sarif_file: opengrep.sarif
+
+  guidance-spotbugs:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9  # v4.8.0
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - run: mvn -B com.github.spotbugs:spotbugs-maven-plugin:check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        if: always()
+        with:
+          name: spotbugs-report
+          path: "**/spotbugsXml.xml"
+
+  guidance-ai-checklist:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          fetch-depth: 0
+      - run: |
+          if git diff --name-only origin/main...HEAD | grep -qE '(ai|llm)/.*\.java$'; then
+            echo "::notice::Chemin IA modifié — checklist de mise en service (TOOLS.md#ia) :"
+            echo "::notice::- version de modèle et endpoint consignés dans la config versionnée"
+            echo "::notice::- juridiction d'hébergement du modèle documentée"
+            echo "::notice::- accès au journal d'interactions restreint, finalité déclarée"
+            echo "::notice::- évaluation art. 6§3 AI Act documentée si fonction annexe III"
+          fi

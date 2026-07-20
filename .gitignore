@@ -8,4 +8,9 @@
 /.venv-docs/
 __pycache__/
 
+# Archives de contribution déposées à la racine ("drops"). Leur contenu est
+# réconcilié dans l'arbre puis l'archive est jetée — elle ne doit jamais être
+# committée telle quelle, ni servir de source de vérité.
+*.zip
+
 bmad/livrables/test

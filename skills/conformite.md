@@ -20,7 +20,7 @@ Foyer n'est pas un cadre de conformité, c'est une **pratique d'ingénierie**. M
 | **ISO/IEC 27001:2022** (SMSI, Annexe A) — accès, dépendances, secrets | **Security gate** : SAST, SCA, secrets, licences (`gates.md`) |
 | **NIST SSDF** (SP 800-218) — secure-SDLC | Boucle de craft `cycle-dev.md` + gates en local **et** en CI (DRY) |
 | **OWASP Top 10 LLM** — *excessive agency* (#6), supply chain (#3) | Anneau 1 permissions `deny`/`ask` + sandbox (`enforcement.md`) ; SCA/licences |
-| **SLSA / SBOM** — provenance de la chaîne de build | ⚠️ **angle mort** — voir §5 |
+| **SLSA / SBOM** — provenance de la chaîne de build | **SBOM** ✓ au plancher de `gates.md` (CycloneDX, `../tools/gates/`) ; **provenance SLSA** ⚠️ **angle mort** — voir §5 |
 
 ### Européen (droit contraignant)
 
@@ -28,7 +28,7 @@ Foyer n'est pas un cadre de conformité, c'est une **pratique d'ingénierie**. M
 |---|---|---|
 | **EU AI Act** (Rgt 2024/1689) | Supervision humaine (Art. 14), journalisation (Art. 12) | **Répondre-de** + registre **TRACE** (`enforcement.md`, `tool.execute.after`) |
 | **NIS2** (Dir. 2022/2555) | Gestion des risques cyber, responsabilité direction | Security gate + 3 anneaux d'enforcement ; gate review par jalon |
-| **Cyber Resilience Act** | *Security-by-design*, SBOM, gestion des vulnérabilités | Distroless (`convergence-iac.md`), SCA ✓ ; **SBOM + reporting** ⚠️ §5 |
+| **Cyber Resilience Act** | *Security-by-design*, SBOM, gestion des vulnérabilités | Distroless (`convergence-iac.md`), SCA ✓, **SBOM** ✓ au plancher de `gates.md` ; **provenance + reporting** ⚠️ §5 |
 | **RGPD** | Art. 22 — pas de décision *entièrement* automatisée | Le répondre-de **est** l'intervention humaine garantie |
 | **DORA** | Résilience opérationnelle (finance) | Rollback, restauration testée (`convergence-iac.md`) |
 
@@ -52,7 +52,7 @@ Foyer distingue **guidance** (oriente) et **enforcement** (contraint) — exacte
 
 Trois écarts connus, à traiter comme des stories — pas à masquer :
 
-1. **SBOM + provenance (SLSA)** — la security gate couvre SCA et licences, **pas** la génération d'un *Software Bill of Materials* ni l'attestation de provenance, exigibles sous CRA (obligations pleines déc. 2027). → *Ajouter un check SBOM/provenance à `gates.md` (release).*
+1. **Provenance (SLSA)** — *angle mort réduit, pas fermé.* Le **SBOM est couvert** : il est passé au **plancher mécanique** de `gates.md` (génération CycloneDX bloquante à chaque build, implémentation dans `../tools/gates/`, choix d'outils justifié dans `../tools/gates/ADR-outillage.md`). Reste découverte l'**attestation de provenance** de la chaîne de build, elle aussi exigible sous CRA (obligations pleines déc. 2027). → *Story : attestation de provenance à la release.*
 2. **Reporting d'incident / vulnérabilité** — l'obligation CRA (notification ENISA/CSIRT **sous 24 h**, dès sept. 2026) et NIS2 n'a **aucun mécanisme** dans Foyer. Terrain naturel : la production (`convergence-iac.md`, trigger AlertManager → platform engineer). → *Procédure de notification déclenchée par alerte.*
 3. **Injection de prompt (OWASP LLM #1)** — les anneaux limitent l'*agency* de l'agent, pas l'injection via contenu. Pertinent uniquement si le **produit livré** embarque un LLM. → *Check dédié à `gates.md` pour l'archétype concerné.*
 

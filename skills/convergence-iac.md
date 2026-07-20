@@ -20,6 +20,8 @@ Le GitOps *est* la primitive en continu : un réconciliateur compare en boucle l
 
 **Déploiement applicatif** — **GitOps**, la **branche GitFlow est la source de vérité**. Build **distroless** en production (surface d'attaque minimale). **Rollback automatique** si les tests de déploiement échouent.
 
+Le distroless réduit la surface ; il ne l'objective pas. C'est le **gate conteneur** du plancher de `gates.md` qui le fait — image scannée avant push registre, bloquant (`../tools/gates/github/workflows/gate-container.yml.example`).
+
 ## Conditionnement par archétype
 
 - **stateless** — infra simple, pas de provisionnement DB ni de sauvegardes.

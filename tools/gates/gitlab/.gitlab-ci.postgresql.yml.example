@@ -1,0 +1,96 @@
+# PostgreSQL / migrations — à inclure avec .gitlab-ci.gates.yml
+# include:
+#   - local: 'gitlab/.gitlab-ci.gates.yml'
+#   - local: 'gitlab/.gitlab-ci.postgresql.yml'
+#
+# Ce template ne compile rien : il porte sur le dossier de migrations
+# (convention : migrations/<horodatage>_<nom>.up.sql /
+# migrations/<horodatage>_<nom>.down.sql — ajuster GLOB_UP / GLOB_DOWN
+# selon l'outil de migration utilisé : node-pg-migrate, sqlx, diesel,
+# Flyway, Sqitch...).
+#
+# GATE — irréversibilité des migrations (bloquant)
+# Justification Foyer directe : une migration appliquée sans script de
+# retour n'est pas un jugement de qualité, c'est un fait binaire — le
+# fichier .down.sql existe ou n'existe pas — et l'absence de retour est
+# irréversible une fois la migration jouée en production. C'est le même
+# critère "objectivable × irréversible" que les quatre gates du document
+# de cadrage, appliqué au domaine base de données plutôt qu'au code.
+
+variables:
+  MIGRATIONS_DIR: "migrations"
+
+gate:migrations-reversibility:
+  stage: gate-sbom   # même position dans le pipeline que les autres gates de fond
+  image: alpine:3.20
+  script:
+    - |
+      missing=0
+      for up in $(find "$MIGRATIONS_DIR" -name "*.up.sql" 2>/dev/null); do
+        down="${up%.up.sql}.down.sql"
+        if [ ! -f "$down" ]; then
+          echo "MANQUANT : $down (pour $up)"
+          missing=$((missing + 1))
+        fi
+      done
+      if [ "$missing" -gt 0 ]; then
+        echo "$missing migration(s) sans script de retour — irréversible, bloqué."
+        exit 1
+      fi
+      echo "Toutes les migrations ont un script de retour."
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "${MIGRATIONS_DIR}/**/*"
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - "${MIGRATIONS_DIR}/**/*"
+
+# GUIDANCE — lint SQL, non bloquant. Attrape les erreurs de style et
+# certains anti-patterns (SELECT *, DROP sans garde-fou) avant revue.
+guidance:sqlfluff:
+  stage: guidance
+  image: python:3.12-slim
+  script:
+    - pip install --no-cache-dir sqlfluff
+    - sqlfluff lint "$MIGRATIONS_DIR" --dialect postgres --format github-annotation > sqlfluff-report.json || true
+  artifacts:
+    when: always
+    paths:
+      - sqlfluff-report.json
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "${MIGRATIONS_DIR}/**/*"
+
+# GUIDANCE — test d'application réelle up puis down sur une instance
+# éphémère. Ne remplace pas le gate ci-dessus (qui vérifie l'existence
+# du fichier) : ceci vérifie qu'il s'exécute sans erreur SQL. Adapter
+# la commande d'application au client de migration réellement utilisé.
+guidance:migration-dry-run:
+  stage: guidance
+  image: postgres:16-alpine
+  services:
+    - postgres:16-alpine
+  variables:
+    POSTGRES_PASSWORD: ci
+    POSTGRES_DB: dryrun
+    PGHOST: postgres
+    PGUSER: postgres
+    PGPASSWORD: ci
+  script:
+    - |
+      for up in $(find "$MIGRATIONS_DIR" -name "*.up.sql" | sort); do
+        echo "Application : $up"
+        psql -d dryrun -f "$up" || { echo "Échec sur $up"; exit 1; }
+      done
+      for down in $(find "$MIGRATIONS_DIR" -name "*.down.sql" | sort -r); do
+        echo "Retour : $down"
+        psql -d dryrun -f "$down" || { echo "Échec sur $down"; exit 1; }
+      done
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "${MIGRATIONS_DIR}/**/*"

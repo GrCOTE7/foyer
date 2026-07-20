@@ -1,0 +1,10 @@
+{
+    "git.ignoreLimitWarning": true,
+    // Les templates de tools/gates/ portent un suffixe .example pour qu'aucun
+    // runner CI ne les découvre comme des pipelines actifs. Contrepartie : les
+    // éditeurs perdent la coloration YAML — d'où cette association.
+    "files.associations": {
+        "*.yml.example": "yaml",
+        "*.yaml.example": "yaml"
+    }
+}

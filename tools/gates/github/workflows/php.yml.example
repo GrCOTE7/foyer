@@ -1,0 +1,147 @@
+name: PHP (Symfony/Drupal) — CI Foyer
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 3 * * 1"
+
+jobs:
+  gate-secrets:
+    uses: ./.github/workflows/gate-secrets.yml
+
+  build:
+    needs: gate-secrets
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
+        with:
+          php-version: "8.3"
+      - run: composer install --no-dev --optimize-autoloader --no-interaction
+      - name: Build image
+        id: meta
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
+          docker build -t "$IMAGE" .
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+  # GATE 2 — SBOM applicatif (bloquant)
+  gate-sbom:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
+        with:
+          php-version: "8.3"
+      - run: composer global require cyclonedx/cyclonedx-php-composer --no-interaction
+      - run: |
+          echo "$(composer global config bin-dir --absolute)" >> "$GITHUB_PATH"
+      - run: composer CycloneDX:make-sbom --output-format=JSON --output-file=php-sbom.cdx.json --omit=dev
+      - run: test -s php-sbom.cdx.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: php-sbom
+          path: php-sbom.cdx.json
+          retention-days: 90
+
+  gate-container:
+    needs: build
+    uses: ./.github/workflows/gate-container.yml
+    with:
+      image-ref: ${{ needs.build.outputs.image }}
+
+  guidance-sast:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Opengrep scan
+        run: |
+          docker run --rm -v "$PWD:/src" opengrep/opengrep:v1.25.0 \
+            scan --config auto --sarif --output /src/opengrep.sarif /src
+      - uses: github/codeql-action/upload-sarif@b7351df727350dca84cb9d725d57dcf5bc82ba26  # v3.37.1
+        if: always()
+        with:
+          sarif_file: opengrep.sarif
+
+  guidance-composer-audit:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
+        with:
+          php-version: "8.3"
+      - run: composer audit --locked --format=json > composer-audit-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        if: always()
+        with:
+          name: composer-audit-report
+          path: composer-audit-report.json
+
+  # phpcs — PSR-12 par défaut. Pour Drupal, remplacer --standard=PSR12
+  # par --standard=Drupal,DrupalPractice (nécessite drupal/coder en
+  # dépendance dev du projet).
+  guidance-phpcs:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
+        with:
+          php-version: "8.3"
+          tools: cs2pr, phpcs
+      - run: phpcs --standard=PSR12 --report=json --report-file=phpcs-report.json src/
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        if: always()
+        with:
+          name: phpcs-report
+          path: phpcs-report.json
+
+  # Actif uniquement si composer.json référence Drupal.
+  guidance-drupal-check:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - id: is-drupal
+        run: |
+          if grep -q "drupal/core" composer.json 2>/dev/null; then
+            echo "drupal=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "drupal=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240  # 2.37.2
+        if: steps.is-drupal.outputs.drupal == 'true'
+        with:
+          php-version: "8.3"
+      - if: steps.is-drupal.outputs.drupal == 'true'
+        run: |
+          composer global require mglaman/drupal-check --no-interaction
+          echo "$(composer global config bin-dir --absolute)" >> "$GITHUB_PATH"
+          drupal-check --deprecations web/modules/custom web/themes/custom
+
+  guidance-ai-checklist:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          fetch-depth: 0
+      - run: |
+          if git diff --name-only origin/main...HEAD | grep -qE '(ai|llm)/.*\.php$'; then
+            echo "::notice::Chemin IA modifié — checklist de mise en service (TOOLS.md#ia) :"
+            echo "::notice::- version de modèle et endpoint consignés dans la config versionnée"
+            echo "::notice::- juridiction d'hébergement du modèle documentée"
+            echo "::notice::- accès au journal d'interactions restreint, finalité déclarée"
+            echo "::notice::- évaluation art. 6§3 AI Act documentée si fonction annexe III"
+          fi

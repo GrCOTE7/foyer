@@ -46,9 +46,10 @@ export const FoyerGates: Plugin = async () => ({
 
 Hors de portée de l'agent et de ses sous-agents :
 
-- **Hooks Git pre-commit / pre-push** — exécutés par git, refusent le commit/push si les gates échouent. `gates.md` à sa vraie place.
+- **Hooks Git pre-commit / pre-push** — exécutés par git, refusent le commit/push si les gates échouent. `gates.md` à sa vraie place. Implémentation : `../tools/gates/workstation/`.
   - **RED-first hook** : bloque si un commit ajoute du code sans test rouge correspondant (L2 discipline validation).
   - **Secrets hook** : `.gitleaks.toml` actif, stop sur tout secret détecté (L1 sécurité runtime).
+  - *Au poste, seul le gate secrets bloque* — rapide et hors ligne. Le reste du plancher (SBOM, conteneur) exige un build : il vit en CI, où le même jeu de vérifications est rejoué (DRY).
 - **CI/CD** — rejoue tout côté plateforme ; rien ne fusionne sans elle.
 - **Protection de branche (serveur)** — la branche GitFlow source de vérité est protégée par règle de merge ; les points irréversibles ne sont pas un `ask` mais une règle qu'aucun agent ne franchit.
 - **Cowork release** — le merge sur `main` nécessite un rapport de release signé GO par l'humain (L2).

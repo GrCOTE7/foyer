@@ -42,6 +42,10 @@ Une dépendance **subie** (héritée d'un choix amont, d'un standard, d'un écos
 
 Exemple : un outil propriétaire moins cher qui expose des données patient à une juridiction étrangère **perd sur l'altérité** — le coût n'est même pas examiné.
 
+> **Application de référence.** La grille est appliquée en entier, ligne par ligne, à une trentaine d'outils DevSecOps dans **`../tools/gates/ADR-outillage.md`** : outils retenus, écartés avec l'axe qui tranche, et trous assumés. C'est l'illustration la plus complète du veto disponible dans ce dépôt — et elle vérifie le principe à l'usage : **le coût n'y départage aucune ligne**, toutes se jouent sur les trois axes supérieurs.
+>
+> Elle éclaire aussi l'axe le plus difficile à tenir. L'**érosion** est le seul des quatre qui dépende du **temps** : un choix qui passait le veto hier peut le manquer aujourd'hui sans que rien n'ait bougé chez soi. Un veto d'érosion ne se tranche donc pas une fois — il se **réexamine**, sur signaux (licence, gouvernance, abandon, format de sortie). D'où le cercle de réexamen que porte cet ADR.
+
 ## 6. Le danger commun à toutes les surfaces
 
 *« Assez fiable pour qu'on cesse de vérifier. »* Vrai d'un modèle IA comme d'un fournisseur SaaS qu'on n'audite plus, d'un OSS qu'on ne relit plus, d'un cloud dont on a oublié la porte de sortie. La vérification doit rester un **réflexe**, sur chaque axe.

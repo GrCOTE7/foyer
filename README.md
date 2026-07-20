@@ -48,6 +48,13 @@ skills/                    Les 4 outils d'objectivation (enfants de la primitive
   conformite.md              mapping mondial→européen→belge (ISO 42001/27001, AI Act, NIS2/CyFun, CRA) + angles morts
   bootstrap-delivrabilite.md story habilitante aboutie : git clone + agent = tout configuré
 
+tools/gates/               Le COMMENT exécutable, en regard du pourquoi de skills/gates.md
+  ADR-outillage.md           LA LISTE CONSOLIDÉE — un outil par gate, verdict de veto
+                             ligne par ligne, écartés nommés, + cercle de réexamen
+  TOOLS.md                   justification fine par écosystème + annexe agrégateur
+  github/ gitlab/            templates CI par stack (8 stacks) — des exemples, pas un livrable
+  workstation/               gates de poste (pre-commit) : seuls les secrets bloquent
+
 personas/                  PHASES 2-4 · qui tient le cercle
   chef-de-projet · csi-engineer · support-engineer · estimateur-capacite-cout   (invariants)
   scrum-master · lead-developer · platform-engineer     (conditionnels barreau)

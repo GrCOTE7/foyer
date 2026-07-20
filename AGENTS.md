@@ -41,9 +41,13 @@ The framework encourages AI agents to:
 
 ## Repository Structure
 
-This is a documentation-only repository for the Foyer framework. Key directories:
+This is a methodology repository for the Foyer framework. Key directories:
 - `bmad/` - Conception phase (TOGAF pipeline)
 - `skills/` - Objective evaluation tools (cycle-dev, gates, convergence-iac, adoption)
+- `tools/` - Executable counterpart to the skills. Currently `tools/gates/`:
+  the consolidated tool list (`ADR-outillage.md`) plus CI templates per stack.
+  **Templates carry a `.example` suffix and never run on this repository** —
+  they are examples to draw from, reinstantiated per consuming project.
 - `personas/` - Roles that hold the feedback loop
 - `docs/` - Generated documentation site
 - `notebooklm/` - Media assets for educational materials
@@ -54,6 +58,7 @@ This is a documentation-only repository for the Foyer framework. Key directories
 - Build documentation: `mkdocs build`
 - Serve documentation locally: `mkdocs serve`
 - Generate supports page: `python scripts/gen_supports.py`
+- Generate gates templates page: `python scripts/gen_gates.py`
 
 ## Special Notes
 

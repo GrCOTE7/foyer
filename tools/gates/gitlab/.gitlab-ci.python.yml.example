@@ -1,0 +1,82 @@
+# Stack Python — à inclure avec .gitlab-ci.gates.yml
+# include:
+#   - local: 'gitlab/.gitlab-ci.gates.yml'
+#   - local: 'gitlab/.gitlab-ci.python.yml'
+
+variables:
+  PYTHON_IMAGE: "python:3.12-slim"
+
+build:python:
+  stage: build
+  image: ${PYTHON_IMAGE}
+  script:
+    - pip install --no-cache-dir -r requirements.txt
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+
+# GATE 2 — SBOM applicatif (bloquant)
+gate:sbom-python:
+  stage: gate-sbom
+  image: ${PYTHON_IMAGE}
+  script:
+    - pip install --no-cache-dir cyclonedx-bom
+    - cyclonedx-py requirements -o python-sbom.cdx.json requirements.txt
+    - test -s python-sbom.cdx.json
+  artifacts:
+    paths:
+      - python-sbom.cdx.json
+    expire_in: 90 days
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# GUIDANCE — SAST, non bloquant
+guidance:sast-opengrep:
+  stage: guidance
+  image: opengrep/opengrep:v${OPENGREP_VERSION}
+  script:
+    - opengrep scan --config auto --sarif --output opengrep.sarif .
+  artifacts:
+    when: always
+    reports:
+      sast: opengrep.sarif
+  allow_failure: true
+
+guidance:bandit:
+  stage: guidance
+  image: ${PYTHON_IMAGE}
+  script:
+    - pip install --no-cache-dir bandit[sarif]
+    - bandit -r . -f sarif -o bandit.sarif || true
+  artifacts:
+    when: always
+    paths:
+      - bandit.sarif
+  allow_failure: true
+
+guidance:ruff:
+  stage: guidance
+  image: ${PYTHON_IMAGE}
+  script:
+    - pip install --no-cache-dir ruff
+    - ruff check . --output-format=json > ruff-report.json || true
+  artifacts:
+    when: always
+    paths:
+      - ruff-report.json
+  allow_failure: true
+
+guidance:ai-provenance-checklist:
+  stage: guidance
+  image: alpine:3.20
+  script:
+    - echo "Rappel — vérifier avant merge (voir TOOLS.md#ia) :"
+    - echo "- version de modèle et endpoint consignés dans la config versionnée"
+    - echo "- juridiction d'hébergement du modèle documentée"
+    - echo "- accès au journal d'interactions restreint, finalité déclarée"
+    - echo "- évaluation art. 6§3 AI Act documentée si fonction annexe III"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "**/ai/**/*.py"
+        - "**/llm/**/*.py"
+  allow_failure: true

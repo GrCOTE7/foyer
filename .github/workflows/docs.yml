@@ -9,9 +9,13 @@ on:
     paths:
       - "**/*.md"
       - "notebooklm/**"
+      # Les templates de gates sont des .yml.example : le filtre **/*.md
+      # ci-dessus ne les attrape pas, d'où cette entrée dédiée.
+      - "tools/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
       - "scripts/gen_supports.py"
+      - "scripts/gen_gates.py"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
@@ -48,9 +52,10 @@ jobs:
           mkdir -p docs
           cp Manifeste-Foyer.md Methode-Foyer.md Boucle-de-retroaction.md Simulateur-Synthese.md docs/
           cp README.md docs/carte.md
-          cp -r skills personas bmad docs/
+          cp -r skills personas bmad tools docs/
           cp -r notebooklm docs/notebooklm
           python scripts/gen_supports.py
+          python scripts/gen_gates.py
 
       - name: Construire le site
         run: mkdocs build

@@ -72,6 +72,24 @@ Formulé autrement : *un outil propriétaire moins cher qui expose le code à un
 
 ---
 
+## Ce que cette liste ne prétend pas être
+
+À lire avant la section suivante : sans cette mise au point, « écarté » se lit comme un verdict de qualité, ce qu'il n'est pas.
+
+**Un plancher, pas un palmarès.** Cette liste ne désigne pas les meilleurs outils du marché. Elle désigne ceux qui remplissent le contrat *sans enfermer*. Ce sont deux questions distinctes, et seule la seconde est tranchée ici. Plusieurs outils écartés sont objectivement plus aboutis que ceux retenus — les règles Pro de Semgrep vont plus loin qu'Opengrep sur Java, c'est documenté plus haut. Ce coût est accepté en connaissance de cause, il n'est pas ignoré.
+
+**Le critère n'est pas le camp, c'est la porte de sortie.** Rien ici ne pose « open source bien, propriétaire mal ». Aucun pôle n'est bon en soi (`../../skills/arbitrage-hybride.md` §1) : ce qui qualifie un choix, c'est la **sortie possible**. Un OSS auto-hébergé qu'une équipe ne sait pas exploiter est moins réversible qu'une solution commerciale dont elle maîtrise l'export. La grille ne défend pas une famille de licences, elle défend une **capacité** — celle de partir. C'est structurel, pas tribal.
+
+Ce n'est pas pour autant neutre : l'altérité prime sur tout, et c'est un choix assumé. Ce qui est refusé, ce n'est pas un camp — c'est l'exposition non examinée.
+
+**Choisir une solution commerciale reste recevable.** La distinction qui décide n'est pas propriétaire / libre mais **subi / assumé** (`arbitrage-hybride.md` §4). Une dépendance héritée sans avoir été examinée se fait remonter. Une dépendance choisie, tracée, dont le prix de sortie est connu, est pleinement imputable — et c'est tout ce qui est exigé. Le choix d'exposition est toujours imputable ; ce qui ne l'est pas, c'est un choix qui n'a jamais été posé comme un choix.
+
+**Le budget départage, il ne rachète pas.** Si un projet a les moyens d'un outil plus abouti, rien ne s'y oppose : le coût est bien un critère de la grille. Mais il vient en dernier, et un étage ne se rachète jamais par le suivant. Le budget tranche entre des options qui ont passé les filtres supérieurs ; il ne les leur fait pas passer. Un outil moins cher qui expose des données à un tiers non consentant perd sur l'altérité — et un outil plus cher qui les expose aussi perd exactement de la même façon.
+
+**Ce que ce socle produit, même sans être optimal.** Sa valeur n'est pas d'être le meilleur outillage possible, mais de rendre l'écosystème **lisible** : chaque équipe sait ce qu'elle bloque, pourquoi, ce qu'elle expose, et ce que coûterait d'en changer. Cette maturité se gagne au moment où le plancher est posé, pas au moment où l'outil parfait est trouvé — et elle reste acquise, quel que soit l'outil qu'on décide ensuite de mettre par-dessus.
+
+---
+
 ## Alternatives écartées
 
 | Écarté | Axe qui tranche | Motif |

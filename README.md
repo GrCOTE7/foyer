@@ -21,6 +21,7 @@ Notes utiles :
 - Port et hôte personnalisables via `FOYER_PORT` et `FOYER_HOST` dans les fichiers starter './go'.
 - Sous Linux/macOS ('./go'), si besoin : `chmod +x go`.
 - Sous Windows ('./go.ps1'), si les scripts sont bloqués : `Set-ExecutionPolicy -Scope Process Bypass`.
+- Hot reload actif: toute modification dans `README.md`, `Manifeste-Foyer.md`, `Methode-Foyer.md`, `Boucle-de-retroaction.md`, `Simulateur-Synthese.md`, `skills/`, `personas/`, `bmad/`, `tools/` ou `notebooklm/` declenche une reconstruction automatique du site.
 
 ## 📖 Documentation en ligne
 

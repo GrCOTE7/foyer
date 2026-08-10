@@ -27,4 +27,4 @@ py scripts/gen_gates.py
 
 Write-Host "Serveur local en cours de lancement..."
 Write-Host "Ouvre $Url"
-py -m mkdocs serve --dev-addr "$HostName`:$Port"
+py -m mkdocs serve --dev-addr "$HostName`:$Port" --watch "README.md" --watch "Manifeste-Foyer.md" --watch "Methode-Foyer.md" --watch "Boucle-de-retroaction.md" --watch "Simulateur-Synthese.md" --watch "skills" --watch "personas" --watch "bmad" --watch "tools" --watch "notebooklm"

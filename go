@@ -29,4 +29,15 @@ python3 scripts/gen_gates.py
 
 echo "Serveur local en cours de lancement..."
 echo "Ouvre ${URL}"
-exec python3 -m mkdocs serve --dev-addr "${HOST}:${PORT}"
+exec python3 -m mkdocs serve \
+--dev-addr "${HOST}:${PORT}" \
+--watch "README.md" \
+--watch "Manifeste-Foyer.md" \
+--watch "Methode-Foyer.md" \
+--watch "Boucle-de-retroaction.md" \
+--watch "Simulateur-Synthese.md" \
+--watch "skills" \
+--watch "personas" \
+--watch "bmad" \
+--watch "tools" \
+--watch "notebooklm"

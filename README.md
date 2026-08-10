@@ -8,6 +8,20 @@
 
 *Dérivé du Manifeste Maury ([`github.com/gilmry/manifest`](https://github.com/gilmry/manifest), CC BY-SA 4.0). Portable : chaque fichier se charge dans le contexte d'un agent (`AGENTS.md` pour OpenCode/Codex/Aider, `CLAUDE.md` pour Claude Code, ou champ `instructions` d'`opencode.json`).*
 
+## Démarrage local rapide (starter `go`)
+
+```bash
+./go
+```
+
+URL locale : **http://localhost:8000**
+
+Notes utiles :
+
+- Port et hôte personnalisables via `FOYER_PORT` et `FOYER_HOST` dans les fichiers starter './go'.
+- Sous Linux/macOS ('./go'), si besoin : `chmod +x go`.
+- Sous Windows ('./go.ps1'), si les scripts sont bloqués : `Set-ExecutionPolicy -Scope Process Bypass`.
+
 ## 📖 Documentation en ligne
 
 **➡️ [gilmry.github.io/foyer](https://gilmry.github.io/foyer/)** — site MkDocs Material qui rassemble le Manifeste, la méthode, les skills, les personas et la **[galerie de supports pédagogiques](https://gilmry.github.io/foyer/supports.html)** : vidéos, podcasts, infographies et pitchs.

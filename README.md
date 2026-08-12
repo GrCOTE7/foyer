@@ -7,10 +7,10 @@
 [![Total Commits](https://img.shields.io/github/commit-activity/t/gilmry/foyer)](https://github.com/gilmry/foyer/commits)
 [![Last Commit](https://img.shields.io/github/last-commit/gilmry/foyer)](https://github.com/gilmry/foyer/commits) → <a href="https://codespaces.new/gilmry/foyer" title="Open YOUR CodeSpace Now... CTRL + Click HERE!"><img src="https://img.shields.io/badge/Foyer%20GitHub%20Codespace%20Ready-green.svg" alt="CodeSpace link" /></a>
 
-> Production intellectuelle de Gilles Maury, dérivée du Manifeste Maury (CC BY-SA 4.0).
+> Production intellectuelle de Gilles Maury, dérivée du Manifeste Maury ([`github.com/gilmry/manifest`](https://github.com/gilmry/manifest), CC BY-SA 4.0).
 > Cadre **généralisable à toute organisation** qui arbitre, sous responsabilité humaine (*répondre-de*), ses **choix technologiques hybrides** — cloud / on-premise, propriétaire / open source, avec ou sans support, IA souveraine / API tierce. La même machinerie de décision gouverne chacune de ces surfaces ; l'agent IA n'en est qu'une (voir `skills/arbitrage-hybride.md`).
 
-*Dérivé du Manifeste Maury ([`github.com/gilmry/manifest`](https://github.com/gilmry/manifest), CC BY-SA 4.0). Portable : chaque fichier se charge dans le contexte d'un agent (`AGENTS.md` pour OpenCode/Codex/Aider, `CLAUDE.md` pour Claude Code, ou champ `instructions` d'`opencode.json`).*
+*Portable : Chaque fichier se charge dans le contexte d'un agent (`AGENTS.md` pour OpenCode/Codex/Aider, `CLAUDE.md` pour Claude Code, ou champ `instructions` d'`opencode.json`).*
 
 ## 🚀 Démarrage rapide (starter `go`)
 
@@ -22,7 +22,7 @@ Après le '*git clone*' de votre *fork*, dans la ***CLI*** (***C***ommand ***L**
 ./go
 ```
 
-(Installation des dépendances si pas déjà fait, lancement de l'app et activation du HotReload)
+(Installation des dépendances si pas déjà fait, lancement de l'app et activation du Hot Reload)
 
 → URL locale : [**http://localhost:8000**](http://localhost:8000)
 

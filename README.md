@@ -1,7 +1,11 @@
-# Foyer — cadre d'agents pour le logiciel sobre, durable, transmissible
+# Foyer — Cadre d'agents pour le logiciel sobre, durable, transmissible
 
-[![Documentation](https://github.com/gilmry/foyer/actions/workflows/docs.yml/badge.svg)](https://github.com/gilmry/foyer/actions/workflows/docs.yml)
+[![GitHub_WorkFlow](https://github.com/gilmry/foyer/actions/workflows/docs.yml/badge.svg)](https://github.com/gilmry/foyer/actions/workflows/docs.yml)
 [![Site](https://img.shields.io/badge/📖_documentation-gilmry.github.io%2Ffoyer-deeporange)](https://gilmry.github.io/foyer/)
+
+[![Commits per Month](https://img.shields.io/github/commit-activity/m/gilmry/foyer)](https://github.com/gilmry/foyer/commits)
+[![Total Commits](https://img.shields.io/github/commit-activity/t/gilmry/foyer)](https://github.com/gilmry/foyer/commits)
+[![Last Commit](https://img.shields.io/github/last-commit/gilmry/foyer)](https://github.com/gilmry/foyer/commits)
 
 > Production intellectuelle de Gilles Maury, dérivée du Manifeste Maury (CC BY-SA 4.0).
 > Cadre **généralisable à toute organisation** qui arbitre, sous responsabilité humaine (*répondre-de*), ses **choix technologiques hybrides** — cloud / on-premise, propriétaire / open source, avec ou sans support, IA souveraine / API tierce. La même machinerie de décision gouverne chacune de ces surfaces ; l'agent IA n'en est qu'une (voir `skills/arbitrage-hybride.md`).

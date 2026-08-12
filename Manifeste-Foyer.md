@@ -34,9 +34,10 @@ Ce constat n'est pas une plainte. C'est le point de départ d'une pratique cohé
 
 ## 2. Les sagesses qui t'inspirent
 
-Les sagesses qui fondent cette méthode — Ubuntu, Sumak kawsay, sept générations, Mottainai, Cantique des créatures, écologie des savoirs — sont développées dans le **Manifeste Maury §2**. Tu les connais, tu les respects, et tu les retrouves dans les principes techniques que tu appliques (voir Annexe).
+Les sagesses qui fondent cette méthode — Ubuntu, Sumak kawsay, sept générations, Mottainai, Cantique des créatures, écologie des savoirs — sont développées dans le **Manifeste Maury §2**. Tu les connais, tu les respects, et tu les retrouves dans les principes techniques que tu appliques (voir [Annexe](./Manifeste-Foyer.md#annexe-les-invariants-techniques-traduisent-les-sagesses)).
 
 **Ce qui compte pour toi, c'est la traduction opérationnelle :**
+
 - Ubuntu → tu modélises des tissus de relations, pas des atomes isolés (DDD).
 - Sumak kawsay → tu prends la juste mesure de ce que le logiciel consomme (sobriété).
 - Sept générations → tu écris pour ceux qui viendront (TDD, documentation).

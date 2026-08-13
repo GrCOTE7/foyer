@@ -1,0 +1,88 @@
+name: PostgreSQL migrations — Gate Foyer
+# Convention : migrations/<horodatage>_<nom>.up.sql / .down.sql
+# Ajuster MIGRATIONS_DIR et le motif de nommage selon l'outil de
+# migration utilisé (node-pg-migrate, sqlx, diesel, Flyway, Sqitch...).
+
+on:
+  pull_request:
+    paths:
+      - "migrations/**"
+  push:
+    branches: [main]
+    paths:
+      - "migrations/**"
+
+env:
+  MIGRATIONS_DIR: migrations
+
+jobs:
+  # GATE — irréversibilité des migrations (bloquant)
+  # Une migration sans script de retour est un fait binaire, pas un
+  # jugement — et son absence devient irréversible une fois jouée en
+  # production. Même critère que les gates du document de cadrage.
+  gate-migrations-reversibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Vérifier la présence d'un script de retour pour chaque migration
+        run: |
+          missing=0
+          for up in $(find "$MIGRATIONS_DIR" -name "*.up.sql"); do
+            down="${up%.up.sql}.down.sql"
+            if [ ! -f "$down" ]; then
+              echo "::error::Manquant : $down (pour $up)"
+              missing=$((missing + 1))
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "$missing migration(s) sans script de retour."
+            exit 1
+          fi
+          echo "Toutes les migrations ont un script de retour."
+
+  guidance-sqlfluff:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: "3.12"
+      - run: pip install --no-cache-dir sqlfluff
+      - run: sqlfluff lint "$MIGRATIONS_DIR" --dialect postgres
+
+  # Dry-run réel sur une instance éphémère. Non bloquant (cf. TOOLS.md) :
+  # une migration cassée se corrige avant merge, ce n'est pas une perte
+  # d'information irréversible comme les quatre gates du cadrage.
+  guidance-migration-dry-run:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: dryrun
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: ci
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Appliquer puis annuler toutes les migrations
+        run: |
+          for up in $(find "$MIGRATIONS_DIR" -name "*.up.sql" | sort); do
+            echo "Application : $up"
+            psql -d dryrun -f "$up"
+          done
+          for down in $(find "$MIGRATIONS_DIR" -name "*.down.sql" | sort -r); do
+            echo "Retour : $down"
+            psql -d dryrun -f "$down"
+          done

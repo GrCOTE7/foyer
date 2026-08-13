@@ -1,8 +1,10 @@
-# Build du site de documentation (assemblé en CI, non versionné).
-# Le contenu de docs/ est généré au build ; seul docs/index.md est versionné.
+# Build de la documentation (source assemblée et rendu HTML), non versionné.
+/.build/*
+!/.build/.gitkeep
+!/.build/docs/
+/.build/docs/*
+!/.build/docs/.gitkeep
 /site/
-/docs/*
-!/docs/index.md
 
 # Environnement virtuel de prévisualisation locale du site
 /.venv-docs/

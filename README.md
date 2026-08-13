@@ -1,27 +1,46 @@
-# Foyer — cadre d'agents pour le logiciel sobre, durable, transmissible
+# Foyer — Cadre d'agents pour le logiciel sobre, durable, transmissible
 
-[![Documentation](https://github.com/gilmry/foyer/actions/workflows/docs.yml/badge.svg)](https://github.com/gilmry/foyer/actions/workflows/docs.yml)
+[![GitHub_WorkFlow](https://github.com/gilmry/foyer/actions/workflows/docs.yml/badge.svg)](https://github.com/gilmry/foyer/actions/workflows/docs.yml)
 [![Site](https://img.shields.io/badge/📖_documentation-gilmry.github.io%2Ffoyer-deeporange)](https://gilmry.github.io/foyer/)
 
-> Production intellectuelle de Gilles Maury, dérivée du Manifeste Maury (CC BY-SA 4.0).
+[![Commits per Month](https://img.shields.io/github/commit-activity/m/gilmry/foyer)](https://github.com/gilmry/foyer/commits)
+[![Total Commits](https://img.shields.io/github/commit-activity/t/gilmry/foyer)](https://github.com/gilmry/foyer/commits)
+[![Last Commit](https://img.shields.io/github/last-commit/gilmry/foyer)](https://github.com/gilmry/foyer/commits) → <a href="https://codespaces.new/gilmry/foyer" title="Open YOUR CodeSpace Now... CTRL + Click HERE!"><img src="https://img.shields.io/badge/Foyer%20GitHub%20Codespace%20Ready-green.svg" alt="CodeSpace link" /></a>
+
+> Production intellectuelle de Gilles Maury, dérivée du Manifeste Maury ([`github.com/gilmry/manifest`](https://github.com/gilmry/manifest), CC BY-SA 4.0).
 > Cadre **généralisable à toute organisation** qui arbitre, sous responsabilité humaine (*répondre-de*), ses **choix technologiques hybrides** — cloud / on-premise, propriétaire / open source, avec ou sans support, IA souveraine / API tierce. La même machinerie de décision gouverne chacune de ces surfaces ; l'agent IA n'en est qu'une (voir `skills/arbitrage-hybride.md`).
 
-*Dérivé du Manifeste Maury ([`github.com/gilmry/manifest`](https://github.com/gilmry/manifest), CC BY-SA 4.0). Portable : chaque fichier se charge dans le contexte d'un agent (`AGENTS.md` pour OpenCode/Codex/Aider, `CLAUDE.md` pour Claude Code, ou champ `instructions` d'`opencode.json`).*
+*Portable : Chaque fichier se charge dans le contexte d'un agent (`AGENTS.md` pour OpenCode/Codex/Aider, `CLAUDE.md` pour Claude Code, ou champ `instructions` d'`opencode.json`).*
 
-## Démarrage local rapide (starter `go`)
+## 🚀 Démarrage rapide (Starter `go`)
+
+### 👉 En local (Linux/MacOS/Windows)
+
+Après le '*git clone*' de votre *fork*, dans la ***CLI*** (***C***ommand ***L***ine ***I***nterface = Console) et dans le dossier du projet :
 
 ```bash
 ./go
 ```
 
-URL locale : **http://localhost:8000**
+(Installation des dépendances si pas déjà fait, lancement de l'app et activation du Hot Reload)
+
+→ URL locale : [**http://localhost:8000**](http://localhost:8000)
 
 Notes utiles :
 
 - Port et hôte personnalisables via `FOYER_PORT` et `FOYER_HOST` dans les fichiers starter './go'.
-- Sous Linux/macOS ('./go'), si besoin : `chmod +x go`.
+- Sous Linux/MacOS ('./go'), si besoin : `chmod +x go`.
 - Sous Windows ('./go.ps1'), si les scripts sont bloqués : `Set-ExecutionPolicy -Scope Process Bypass`.
-- Hot reload actif: toute modification dans `README.md`, `Manifeste-Foyer.md`, `Methode-Foyer.md`, `Boucle-de-retroaction.md`, `Simulateur-Synthese.md`, `skills/`, `personas/`, `bmad/`, `tools/` ou `notebooklm/` declenche une reconstruction automatique du site.
+- Hot reload actif: Toute modification dans `README.md`, `Manifeste-Foyer.md`, `Methode-Foyer.md`, `Boucle-de-retroaction.md`, `Simulateur-Synthese.md`, `skills/`, `personas/`, `bmad/`, `tools/` ou `notebooklm/` déclenche une reconstruction automatique du site.
+
+### 👉 Et encore + simple et sans rien installer : Codespace
+
+→ <a href="https://codespaces.new/gilmry/foyer" title="Open YOUR CodeSpace Now... CTRL + Click HERE!"><img src="https://img.shields.io/badge/Developpez%20Foyer%20directement%20en%20ligne%20sur%20GitHub-blue.svg" alt="CodeSpace link" /></a>
+
+Opérationnel : *Hot Reload*, et bien-sûr, *commits* & *push* 👍
+
+    Rappel : Avant de lancer avec `./go`, autoriser l'exécution avec `chmod +x go`
+             (Uniquement lors de la création car l'OS d'un CodeSpace est Linux)
 
 ## 📖 Documentation en ligne
 
@@ -31,7 +50,18 @@ Le site est reconstruit et redéployé automatiquement à chaque push sur `main`
 
 ## L'idée en une phrase
 
-Tout travail tourne sur un **même cercle** — Conception → Construction → Résultat → Évaluation → Amélioration — où un **outil externe objective** le résultat, et où l'humain garde la responsabilité (*« pourrai-je en répondre, et devant qui ? »*).
+Tout travail tourne sur un **même cycle** — Conception → Construction → Résultat → Évaluation → Amélioration — où un **outil externe objective** le résultat, et où l'humain garde la responsabilité (*« pourrai-je en répondre, et devant qui ? »*).
+
+```mermaid
+flowchart LR
+    A[<b>C</b>onception] --> B[<b>C</b>onstruction]
+    B --> C[<b>R</b>ésultat]
+    C --> D[<b>É</b>valuation]
+    D --> E[<b>A</b>mélioration]
+    E --> A
+    C --- F((Un <b>outil externe<br/>objective le résultat</b>))
+    D --- G((<b></b>Responsabilité humaine</b><br/>« Pourrai‑je en répondre,<br/>et devant qui ? »))
+```
 
 ## Les trois axes
 

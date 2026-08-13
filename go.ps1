@@ -16,15 +16,6 @@ catch {
     python -m pip install -r requirements-docs.txt
 }
 
-Write-Host "Assemblage du contenu dans docs/..."
-New-Item -ItemType Directory -Force docs | Out-Null
-Copy-Item Manifeste-Foyer.md,Methode-Foyer.md,Boucle-de-retroaction.md,Simulateur-Synthese.md docs -Force
-Copy-Item README.md docs/carte.md -Force
-Copy-Item skills,personas,bmad,tools docs -Recurse -Force
-Copy-Item notebooklm docs/notebooklm -Recurse -Force
-python scripts/gen_supports.py
-python scripts/gen_gates.py
-
 Write-Host "Serveur local en cours de lancement..."
 Write-Host "Ouvre $Url"
 python -m mkdocs serve --dev-addr "$HostName`:$Port" --watch "README.md" --watch "Manifeste-Foyer.md" --watch "Methode-Foyer.md" --watch "Boucle-de-retroaction.md" --watch "Simulateur-Synthese.md" --watch "skills" --watch "personas" --watch "bmad" --watch "tools" --watch "notebooklm"

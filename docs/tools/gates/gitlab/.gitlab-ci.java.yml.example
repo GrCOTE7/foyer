@@ -1,0 +1,75 @@
+# Stack Java / Maven — à inclure avec .gitlab-ci.gates.yml
+# include:
+#   - local: 'gitlab/.gitlab-ci.gates.yml'
+#   - local: 'gitlab/.gitlab-ci.java.yml'
+
+variables:
+  MAVEN_IMAGE: "maven:3.9-eclipse-temurin-21"
+
+build:java:
+  stage: build
+  image: ${MAVEN_IMAGE}
+  script:
+    - mvn -B -DskipTests package
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 day
+
+# GATE 2 — SBOM applicatif (bloquant)
+gate:sbom-maven:
+  stage: gate-sbom
+  image: ${MAVEN_IMAGE}
+  script:
+    - mvn -B org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+    # makeAggregateBom produit déjà l'agrégat à la racine du reactor ; le find
+    # récursif publiait le BOM d'un module au hasard à sa place.
+    - cp target/bom.json maven-sbom.cdx.json
+    - test -s maven-sbom.cdx.json
+  artifacts:
+    paths:
+      - maven-sbom.cdx.json
+    expire_in: 90 days
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# GUIDANCE — SAST, non bloquant
+guidance:sast-opengrep:
+  stage: guidance
+  image: opengrep/opengrep:v${OPENGREP_VERSION}
+  script:
+    - opengrep scan --config auto --sarif --output opengrep.sarif .
+  artifacts:
+    when: always
+    reports:
+      sast: opengrep.sarif
+  allow_failure: true
+
+guidance:spotbugs:
+  stage: guidance
+  image: ${MAVEN_IMAGE}
+  script:
+    - mvn -B com.github.spotbugs:spotbugs-maven-plugin:check || true
+  artifacts:
+    when: always
+    paths:
+      - "**/spotbugsXml.xml"
+  allow_failure: true
+
+guidance:ai-provenance-checklist:
+  stage: guidance
+  image: alpine:3.20
+  script:
+    - echo "Rappel — vérifier avant merge (voir TOOLS.md#ia) :"
+    - echo "- version de modèle et endpoint consignés dans la config versionnée"
+    - echo "- juridiction d'hébergement du modèle documentée"
+    - echo "- accès au journal d'interactions restreint, finalité déclarée"
+    - echo "- évaluation art. 6§3 AI Act documentée si fonction annexe III"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "**/ai/**/*.java"
+        - "**/llm/**/*.java"
+  allow_failure: true

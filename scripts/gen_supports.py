@@ -14,11 +14,13 @@ accentués sur GitHub Pages. Comme mkdocs.yml fixe use_directory_urls: false,
 supports.html et notebooklm/ sont voisins à la racine du site : les liens
 relatifs « notebooklm/... » résolvent correctement (y compris sous /foyer/).
 """
+
 from pathlib import Path
+import os
 from urllib.parse import quote
 
 SRC = Path("notebooklm")
-OUT = Path("docs/supports.md")
+OUT = Path(os.environ.get("FOYER_DOCS_DIR", "docs")) / "supports.md"
 
 # Chaque entrée décrit une section. `split` éclate la section par sous-dossier ;
 # `sub_labels` renomme l'affichage d'un sous-dossier ; `sub_last` force certains
@@ -105,9 +107,9 @@ def render(path: Path, level: int = 3) -> str:
     if suf == ".html":
         return (
             f"{h} {title}\n\n"
-            f'[Ouvrir en plein écran ↗]({url}){{ target=_blank rel=noopener }}\n\n'
+            f"[Ouvrir en plein écran ↗]({url}){{ target=_blank rel=noopener }}\n\n"
             f'<iframe src="{url}" title="{title}" loading="lazy" {IFRAME_STYLE}>'
-            f'</iframe>\n'
+            f"</iframe>\n"
         )
     return f"- [{title}]({url})"
 
@@ -168,7 +170,8 @@ def main() -> None:
         sub_last = section.get("sub_last", [])
         subdirs = [d for d in ordered_subdirs(folder, sub_last) if media_in(d)]
         direct = sorted(
-            p for p in folder.iterdir()
+            p
+            for p in folder.iterdir()
             if p.is_file() and p.suffix.lower() in MEDIA_EXTS
         )
         if not subdirs and not direct:

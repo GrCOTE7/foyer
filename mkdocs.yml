@@ -11,13 +11,13 @@ repo_url: https://github.com/gilmry/foyer
 repo_name: gilmry/foyer
 edit_uri: ""
 
-# Le contenu est assemblé au build (voir .github/workflows/docs.yml) :
+# Le contenu est assemblé au build dans .build/docs/ via scripts/mkdocs_sync.py :
 # les .md de la racine, skills/, personas/, bmad/, tools/ et les médias
-# notebooklm/ sont copiés dans docs/. Deux pages sont générées :
+# notebooklm/ y sont copiés. Deux pages sont générées :
 # supports.md par scripts/gen_supports.py, gates-templates.md par
 # scripts/gen_gates.py (les templates sont des .yml.example, que MkDocs ne
 # rendrait pas comme des pages).
-docs_dir: docs
+docs_dir: .build/docs
 use_directory_urls: false
 
 theme:
@@ -57,12 +57,28 @@ markdown_extensions:
   - md_in_html
   - tables
   - footnotes
-  - toc:
-      permalink: true
-  - pymdownx.superfences
   - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - pymdownx.mark
+  - pymdownx.emoji
+  - pymdownx.magiclink
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.arithmatex
+  - pymdownx.caret
+  - pymdownx.tilde
+  - pymdownx.smartsymbols
+  - pymdownx.inlinehilite
+  - pymdownx.betterem
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+  - toc:
+      permalink: true
 
 plugins:
   - awesome-pages:

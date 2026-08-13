@@ -14,10 +14,12 @@ mais illisibles en ligne.
 Chaque template est rendu dans un bloc repliable `???` (pymdownx.details, déjà
 activé dans mkdocs.yml) : la page reste parcourable malgré ~2000 lignes de YAML.
 """
+
 from pathlib import Path
+import os
 
 SRC = Path("tools/gates")
-OUT = Path("docs/gates-templates.md")
+OUT = Path(os.environ.get("FOYER_DOCS_DIR", "docs")) / "gates-templates.md"
 
 # Une entrée par plateforme. `glob` est relatif à SRC ; `lang` fixe la
 # coloration du bloc de code.

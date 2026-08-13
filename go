@@ -13,7 +13,7 @@ if ! command -v python3 >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! python3 -c "import mkdocs" >/dev/null 2>&1; then
+if ! python3 -c "import mkdocs; import mkdocs_open_in_new_tab" >/dev/null 2>&1; then
     echo "Installation des dependances docs..."
     python3 -m pip install -r requirements-docs.txt
 fi

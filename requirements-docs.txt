@@ -2,4 +2,5 @@
 # Installées par la GitHub Action .github/workflows/docs.yml.
 mkdocs-material>=9.5,<10
 mkdocs-awesome-pages-plugin
+mkdocs-open-in-new-tab
 pymdown-extensions

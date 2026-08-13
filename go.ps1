@@ -9,7 +9,7 @@ $HostName = if ($env:FOYER_HOST) { $env:FOYER_HOST } else { '127.0.0.1' }
 $Url = "http://localhost:$Port"
 
 try {
-    python -c "import mkdocs" | Out-Null
+    python -c "import mkdocs; import mkdocs_open_in_new_tab" | Out-Null
 }
 catch {
     Write-Host "Installation des dépendances docs..."

@@ -12,7 +12,7 @@
 
 *Portable : Chaque fichier se charge dans le contexte d'un agent (`AGENTS.md` pour OpenCode/Codex/Aider, `CLAUDE.md` pour Claude Code, ou champ `instructions` d'`opencode.json`).*
 
-## 🚀 Démarrage rapide (starter `go`)
+## 🚀 Démarrage rapide (Starter `go`)
 
 ### 👉 En local (Linux/MacOS/Windows)
 

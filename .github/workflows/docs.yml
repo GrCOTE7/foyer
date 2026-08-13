@@ -52,17 +52,6 @@ jobs:
       - name: Installer MkDocs Material
         run: pip install -r requirements-docs.txt
 
-      - name: Assembler le contenu dans docs/
-        run: |
-          set -euo pipefail
-          mkdir -p docs
-          cp Manifeste-Foyer.md Methode-Foyer.md Boucle-de-retroaction.md Simulateur-Synthese.md docs/
-          cp README.md docs/carte.md
-          cp -r skills personas bmad tools docs/
-          cp -r notebooklm docs/notebooklm
-          python scripts/gen_supports.py
-          python scripts/gen_gates.py
-
       - name: Construire le site
         run: mkdocs build
 

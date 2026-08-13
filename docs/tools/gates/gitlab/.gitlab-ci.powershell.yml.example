@@ -1,0 +1,94 @@
+# Stack PowerShell — à inclure avec .gitlab-ci.gates.yml
+# include:
+#   - local: 'gitlab/.gitlab-ci.gates.yml'
+#   - local: 'gitlab/.gitlab-ci.powershell.yml'
+#
+# Particularité de ce stack : un dépôt PowerShell (scripts d'automatisation,
+# module d'administration) n'est pas systématiquement conteneurisé. Les
+# gates SBOM/conteneur du fichier gates.yml supposent une image Docker —
+# ils ne s'exécutent donc ici que si un Dockerfile est présent. Aucun
+# générateur CycloneDX dédié à l'écosystème PowerShell Gallery n'est
+# aujourd'hui établi (voir TOOLS.md) : à défaut, on documente les modules
+# requis plutôt que de produire un SBOM de façade.
+
+variables:
+  PWSH_IMAGE: "mcr.microsoft.com/powershell:7.4-alpine-3.20"
+
+build:powershell:
+  stage: build
+  image: ${PWSH_IMAGE}
+  script:
+    - pwsh -NoProfile -Command "Get-ChildItem -Recurse -Filter *.ps1 | ForEach-Object { \$null = [System.Management.Automation.Language.Parser]::ParseFile(\$_.FullName, [ref]\$null, [ref]\$errors); if (\$errors) { Write-Error \"Erreur de syntaxe : \$($_.FullName)\" } }"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+# Build/scan conteneur — uniquement si le dépôt en produit un (ex. tâche
+# planifiée packagée, agent d'automatisation). Sans Dockerfile, ce job ne
+# s'exécute pas : ni SBOM ni gate conteneur ne s'appliquent à un script
+# exécuté directement sur un hôte, hors du périmètre couvert ici.
+build:powershell-container:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      exists:
+        - Dockerfile
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      exists:
+        - Dockerfile
+
+# GUIDANCE — PSScriptAnalyzer : lint et sécurité (détecte notamment
+# ConvertTo-SecureString en clair, Invoke-Expression sur entrée non
+# fiable, mots de passe en paramètre). Éditeur Microsoft, MIT, gratuit.
+guidance:psscriptanalyzer:
+  stage: guidance
+  image: ${PWSH_IMAGE}
+  script:
+    - >
+      pwsh -NoProfile -Command "
+      Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -Repository PSGallery;
+      \$results = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Warning,Error;
+      \$results | ConvertTo-Json -Depth 4 | Out-File psscriptanalyzer-report.json;
+      \$results | Format-Table -AutoSize
+      "
+  artifacts:
+    when: always
+    paths:
+      - psscriptanalyzer-report.json
+  allow_failure: true
+
+# GUIDANCE — Pester, si des tests sont présents (*.Tests.ps1).
+guidance:pester:
+  stage: guidance
+  image: ${PWSH_IMAGE}
+  script:
+    - >
+      pwsh -NoProfile -Command "
+      if (-not (Get-ChildItem -Recurse -Filter *.Tests.ps1 -ErrorAction SilentlyContinue)) {
+        Write-Host 'Aucun test Pester trouvé — job ignoré.'; exit 0
+      }
+      Install-Module -Name Pester -Force -Scope CurrentUser -MinimumVersion 5.0;
+      Invoke-Pester -CI
+      "
+  allow_failure: true
+
+guidance:ai-provenance-checklist:
+  stage: guidance
+  image: alpine:3.20
+  script:
+    - echo "Rappel — vérifier avant merge (voir TOOLS.md#ia) :"
+    - echo "- version de modèle et endpoint consignés dans la config versionnée"
+    - echo "- juridiction d'hébergement du modèle documentée"
+    - echo "- accès au journal d'interactions restreint, finalité déclarée"
+    - echo "- évaluation art. 6§3 AI Act documentée si fonction annexe III"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "**/ai/**/*.ps1"
+        - "**/llm/**/*.ps1"
+  allow_failure: true

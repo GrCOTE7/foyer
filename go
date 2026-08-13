@@ -18,15 +18,6 @@ if ! python3 -c "import mkdocs" >/dev/null 2>&1; then
     python3 -m pip install -r requirements-docs.txt
 fi
 
-echo "Assemblage du contenu dans docs/..."
-mkdir -p docs
-cp Manifeste-Foyer.md Methode-Foyer.md Boucle-de-retroaction.md Simulateur-Synthese.md docs/
-cp README.md docs/carte.md
-cp -r skills personas bmad tools docs/
-cp -r notebooklm docs/notebooklm
-python3 scripts/gen_supports.py
-python3 scripts/gen_gates.py
-
 echo "Serveur local en cours de lancement..."
 echo "Ouvre ${URL}"
 exec python3 -m mkdocs serve \

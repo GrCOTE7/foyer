@@ -1,0 +1,94 @@
+# Stack Rust / Cargo — à inclure avec .gitlab-ci.gates.yml
+# include:
+#   - local: 'gitlab/.gitlab-ci.gates.yml'
+#   - local: 'gitlab/.gitlab-ci.rust.yml'
+
+variables:
+  RUST_IMAGE: "rust:1.82-slim-bookworm"
+
+build:rust:
+  stage: build
+  image: ${RUST_IMAGE}
+  script:
+    - cargo build --release --locked
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+  artifacts:
+    paths:
+      - target/release/
+    expire_in: 1 day
+
+# GATE 2 — SBOM applicatif (bloquant)
+gate:sbom-rust:
+  stage: gate-sbom
+  image: ${RUST_IMAGE}
+  script:
+    - cargo install cargo-cyclonedx --locked
+    - cargo cyclonedx --format json --all --output-cdx
+    # Un workspace produit un SBOM PAR CRATE — les collecter tous (cf. le
+    # commentaire du template GitHub équivalent).
+    - mkdir -p sbom
+    - find . -name "*.cdx.json" -not -path "./sbom/*" -exec cp --parents {} sbom/ \;
+    - test -n "$(ls -A sbom)"
+  artifacts:
+    paths:
+      - sbom/
+    expire_in: 90 days
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# GUIDANCE — SAST, non bloquant
+guidance:sast-opengrep:
+  stage: guidance
+  image: opengrep/opengrep:v${OPENGREP_VERSION}
+  script:
+    - opengrep scan --config auto --sarif --output opengrep.sarif .
+  artifacts:
+    when: always
+    reports:
+      sast: opengrep.sarif
+  allow_failure: true
+
+guidance:clippy:
+  stage: guidance
+  image: ${RUST_IMAGE}
+  script:
+    - rustup component add clippy
+    - cargo clippy --message-format=json --all-targets > clippy-report.json || true
+  artifacts:
+    when: always
+    paths:
+      - clippy-report.json
+  allow_failure: true
+
+# Base RustSec — complète Trivy, dont la couverture de l'écosystème Cargo
+# est plus tardive que celle de RustSec. Non bloquant : une dépendance
+# vulnérable listée n'est pas nécessairement atteinte par le code
+# (triage requis, cf. TOOLS.md).
+guidance:cargo-audit:
+  stage: guidance
+  image: ${RUST_IMAGE}
+  script:
+    - cargo install cargo-audit --locked
+    - cargo audit --json > cargo-audit-report.json || true
+  artifacts:
+    when: always
+    paths:
+      - cargo-audit-report.json
+  allow_failure: true
+
+guidance:ai-provenance-checklist:
+  stage: guidance
+  image: alpine:3.20
+  script:
+    - echo "Rappel — vérifier avant merge (voir TOOLS.md#ia) :"
+    - echo "- version de modèle et endpoint consignés dans la config versionnée"
+    - echo "- juridiction d'hébergement du modèle documentée"
+    - echo "- accès au journal d'interactions restreint, finalité déclarée"
+    - echo "- évaluation art. 6§3 AI Act documentée si fonction annexe III"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - "**/ai/**/*.rs"
+        - "**/llm/**/*.rs"
+  allow_failure: true

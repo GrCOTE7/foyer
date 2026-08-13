@@ -1,4 +1,4 @@
-# Manifeste Foyer
+# Manifeste Foyer - Persona
 
 *Persona de l'Architecte Solution — une pratique du logiciel sobre, durable et transmissible*
 

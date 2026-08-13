@@ -65,8 +65,13 @@ markdown_extensions:
       anchor_linenums: true
 
 plugins:
+  - awesome-pages:
+      collapse_single_pages: true
   - search:
       lang: fr
+  - open-in-new-tab:
+      add_icon: true
+
 
 hooks:
   - scripts/mkdocs_sync.py

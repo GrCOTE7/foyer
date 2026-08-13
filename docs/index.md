@@ -1,4 +1,4 @@
-# Méthode Foyer
+# Méthode Foyer - Présentation
 
 *Cadre d'agents pour un logiciel **sobre, durable et transmissible**.*
 

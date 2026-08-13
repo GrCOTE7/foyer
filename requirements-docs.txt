@@ -1,3 +1,4 @@
 # Dépendances de construction du site de documentation (MkDocs Material).
 # Installées par la GitHub Action .github/workflows/docs.yml.
 mkdocs-material>=9.5,<10
+mkdocs-awesome-pages-plugin

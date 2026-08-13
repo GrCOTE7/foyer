@@ -50,7 +50,19 @@ Le site est reconstruit et redéployé automatiquement à chaque push sur `main`
 
 ## L'idée en une phrase
 
-Tout travail tourne sur un **même cercle** — Conception → Construction → Résultat → Évaluation → Amélioration — où un **outil externe objective** le résultat, et où l'humain garde la responsabilité (*« pourrai-je en répondre, et devant qui ? »*).
+Tout travail tourne sur un **même cycle** — Conception → Construction → Résultat → Évaluation → Amélioration — où un **outil externe objective** le résultat, et où l'humain garde la responsabilité (*« pourrai-je en répondre, et devant qui ? »*).
+
+```mermaid
+flowchart LR
+    A[**C**onception] --> B[**C**onstruction]
+    B --> C[**R**ésultat]
+    C --> D[**É**valuation]
+    D --> E[**A**mélioration]
+    E --> A
+
+    C --- F((Un **outil externe<br/>objective le résultat**))
+    D --- G((**Responsabilité humaine**<br/>« Pourrai‑je en répondre,<br/>et devant qui ? »))
+```
 
 ## Les trois axes
 

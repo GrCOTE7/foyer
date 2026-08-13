@@ -1,4 +1,4 @@
-# Méthode Foyer
+# Méthode Foyer - Détail
 
 *Cadre opératoire pour un agent de développement supervisé. Portable : à charger comme `AGENTS.md` (OpenCode, Codex, Aider, goose, Zed…), comme `CLAUDE.md`, ou via le champ `instructions` d'`opencode.json`.*
 

@@ -18,6 +18,9 @@ if ! python3 -c "import mkdocs" >/dev/null 2>&1; then
     python3 -m pip install -r requirements-docs.txt
 fi
 
+# MkDocs exige que docs_dir existe avant de charger la configuration.
+mkdir -p ".build/docs"
+
 echo "Serveur local en cours de lancement..."
 echo "Ouvre ${URL}"
 exec python3 -m mkdocs serve \

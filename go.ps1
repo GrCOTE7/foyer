@@ -16,6 +16,9 @@ catch {
     python -m pip install -r requirements-docs.txt
 }
 
+# MkDocs exige que docs_dir existe avant de charger la configuration.
+New-Item -ItemType Directory -Path ".build/docs" -Force | Out-Null
+
 Write-Host "Serveur local en cours de lancement..."
 Write-Host "Ouvre $Url"
 python -m mkdocs serve --dev-addr "$HostName`:$Port" --watch "README.md" --watch "Manifeste-Foyer.md" --watch "Methode-Foyer.md" --watch "Boucle-de-retroaction.md" --watch "Simulateur-Synthese.md" --watch "skills" --watch "personas" --watch "bmad" --watch "tools" --watch "notebooklm"

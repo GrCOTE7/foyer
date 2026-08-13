@@ -48,25 +48,14 @@ def _needs_copy(src: Path, dst: Path) -> bool:
 
 def _sync_file(src: Path, dst: Path) -> None:
     dst.parent.mkdir(parents=True, exist_ok=True)
-    if _needs_copy(src, dst):
-        shutil.copy2(src, dst)
+    shutil.copy2(src, dst)
 
 
 def _sync_dir(src_dir: Path, dst_dir: Path) -> None:
-    dst_dir.mkdir(parents=True, exist_ok=True)
-    for src_path in src_dir.rglob("*"):
-        rel = src_path.relative_to(src_dir)
-        dst_path = dst_dir / rel
-        if src_path.is_dir():
-            dst_path.mkdir(parents=True, exist_ok=True)
-            continue
-        _sync_file(src_path, dst_path)
+    shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
 
 
 def sync_docs_content() -> None:
-    if DOCS.exists():
-        shutil.rmtree(DOCS)
-
     DOCS.mkdir(parents=True, exist_ok=True)
 
     for src_name, dst_name in DOCS_SOURCE_FILES.items():

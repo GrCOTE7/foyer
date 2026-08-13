@@ -54,14 +54,21 @@ Tout travail tourne sur un **même cycle** — Conception → Construction → R
 
 ```mermaid
 flowchart LR
-    A[**C**onception] --> B[**C**onstruction]
-    B --> C[**R**ésultat]
-    C --> D[**É**valuation]
-    D --> E[**A**mélioration]
+    classDef conception fill:#FFCCBC,stroke:#E64A19,color:#000
+    classDef construction fill:#FFE0B2,stroke:#FB8C00,color:#000
+    classDef resultat fill:#FFECB3,stroke:#F57C00,color:#000
+    classDef evaluation fill:#FFF8E1,stroke:#FFA726,color:#000
+    classDef amelioration fill:#FBE9E7,stroke:#D84315,color:#000
+    classDef externe fill:#ECEFF1,stroke:#607D8B,color:#000
+
+    A[Conception]:::conception --> B[Construction]:::construction
+    B --> C[Résultat]:::resultat
+    C --> D[Évaluation]:::evaluation
+    D --> E[Amélioration]:::amelioration
     E --> A
 
-    C --- F((Un **outil externe<br/>objective le résultat**))
-    D --- G((**Responsabilité humaine**<br/>« Pourrai‑je en répondre,<br/>et devant qui ? »))
+    C --- F((Outil externe<br/>objectivant le résultat)):::externe
+    D --- G((Responsabilité humaine<br/>« pourrai‑je en répondre,<br/>et devant qui »)):::externe
 ```
 
 ## Les trois axes
